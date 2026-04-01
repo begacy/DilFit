@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DilFit — Support</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card2: #263348;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --success: #22c55e;
+      --border: rgba(255,255,255,0.07);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    .topnav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .topnav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .brand { font-size: 1.2rem; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.5px; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-links a {
+      padding: 6px 14px; border-radius: 8px;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-links a:hover { background: var(--card); color: var(--text); }
+    .nav-links a.active { background: var(--accent); color: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1f3a 0%, #0f172a 60%);
+      padding: 72px 24px 56px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
+    .hero p { color: var(--muted); font-size: 1.1rem; max-width: 480px; margin: 0 auto 32px; }
+    .search-bar {
+      display: flex; max-width: 480px; margin: 0 auto;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .search-bar input {
+      flex: 1; padding: 14px 18px;
+      background: transparent; border: none; outline: none;
+      color: var(--text); font-size: 1rem;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+    .search-bar button {
+      padding: 14px 20px; background: var(--accent);
+      border: none; cursor: pointer; color: #fff;
+      font-weight: 600; font-size: 0.9rem;
+      transition: opacity 0.15s;
+    }
+    .search-bar button:hover { opacity: 0.85; }
+
+    /* ── QUICK LINKS ── */
+    .quick {
+      max-width: 1100px; margin: 48px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .quick-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 20px; text-align: center;
+      text-decoration: none; color: var(--text);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .quick-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .quick-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .quick-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .quick-card p { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 800px; margin: 56px auto;
+      padding: 0 24px 80px;
+    }
+    .section-title {
+      font-size: 1.5rem; font-weight: 800; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── FAQ ACCORDION ── */
+    .faq-group { margin-bottom: 40px; }
+    .faq-group-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent-light); margin-bottom: 12px;
+    }
+    details {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 8px;
+      overflow: hidden;
+    }
+    details[open] { border-color: var(--accent); }
+    summary {
+      padding: 18px 20px; cursor: pointer;
+      font-weight: 600; font-size: 0.95rem;
+      list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '+'; font-size: 1.4rem; color: var(--accent);
+      transition: transform 0.2s; line-height: 1;
+    }
+    details[open] summary::after { transform: rotate(45deg); }
+    .faq-body { padding: 0 20px 18px; color: var(--muted); font-size: 0.92rem; }
+    .faq-body p { margin-bottom: 10px; }
+    .faq-body ul { padding-left: 20px; }
+    .faq-body li { margin-bottom: 6px; }
+    .faq-body a { color: var(--accent); text-decoration: none; }
+    .faq-body a:hover { text-decoration: underline; }
+    .faq-body code {
+      background: rgba(99,102,241,0.15); padding: 2px 7px;
+      border-radius: 4px; font-size: 0.85rem; color: var(--accent-light);
+    }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05));
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 20px; padding: 40px;
+      text-align: center; margin-top: 56px;
+    }
+    .contact-card h2 { font-size: 1.6rem; margin-bottom: 10px; }
+    .contact-card p { color: var(--muted); margin-bottom: 28px; }
+    .contact-options { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary {
+      background: var(--card2); color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    /* ── DELETE ACCOUNT ── */
+    .danger-box {
+      background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 12px; padding: 20px;
+      margin-top: 16px;
+    }
+    .danger-box h4 { color: #f87171; margin-bottom: 8px; font-size: 0.95rem; }
+    .danger-box p { color: var(--muted); font-size: 0.88rem; margin: 0; }
+    .danger-box a { color: #f87171; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px; text-align: center;
+      color: var(--muted); font-size: 0.82rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .contact-card { padding: 28px 20px; }
+      .topnav-inner { flex-direction: column; height: auto; padding: 12px 0; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <a class="brand" href="index.html">Fit<span>Book</span></a>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="support.html" class="active">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>How can we help?</h1>
+    <p>Find answers to common questions or reach out to our support team directly.</p>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for help…" id="faqSearch" oninput="filterFAQ(this.value)">
+      <button type="button">Search</button>
+    </div>
+  </section>
+
+  <!-- QUICK LINKS -->
+  <div class="quick">
+    <a class="quick-card" href="#getting-started">
+      <span class="quick-icon">🚀</span>
+      <h3>Getting Started</h3>
+      <p>Set up your account and first workout</p>
+    </a>
+    <a class="quick-card" href="#workouts">
+      <span class="quick-icon">💪</span>
+      <h3>Workouts & Tracking</h3>
+      <p>Logging exercises, sets, and progress</p>
+    </a>
+    <a class="quick-card" href="#account">
+      <span class="quick-icon">👤</span>
+      <h3>Account & Billing</h3>
+      <p>Profile, subscription, and data</p>
+    </a>
+    <a class="quick-card" href="#social">
+      <span class="quick-icon">🌐</span>
+      <h3>Social & Challenges</h3>
+      <p>Feed, followers, and competitions</p>
+    </a>
+    <a class="quick-card" href="#ai-coach">
+      <span class="quick-icon">🤖</span>
+      <h3>AI Coach</h3>
+      <p>Personalized training advice</p>
+    </a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <!-- GETTING STARTED -->
+    <div id="getting-started">
+      <div class="section-title">Getting Started</div>
+      <div class="faq-group">
+        <div class="faq-group-label">Account Setup</div>
+
+        <details>
+          <summary>How do I create a DilFit account?</summary>
+          <div class="faq-body">
+            <p>Download DilFit from the App Store or Google Play. Tap <strong>Sign Up</strong> and choose to register with your email address, Google account, or Apple ID. Follow the onboarding steps to set your fitness goals and preferences.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>I forgot my password — how do I reset it?</summary>
+          <div class="faq-body">
+            <p>On the login screen, tap <strong>Forgot Password</strong>. Enter your registered email address and we'll send you a reset link. The link expires after 1 hour.</p>
+            <p>If you signed up via Google or Apple, use those buttons to log in — no password is needed.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can I use DilFit without an internet connection?</summary>
+          <div class="faq-body">
+            <p>Yes. DilFit caches your workout history and exercise library locally so you can log workouts offline. Your data syncs automatically the next time you connect to the internet.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I set my fitness goals and unit preferences?</summary>
+          <div class="faq-body">
+            <p>Go to <strong>Profile → Settings → Fitness Preferences</strong>. Here you can set:</p>
+            <ul>
+              <li>Weight unit (kg / lbs)</li>
+              <li>Weekly workout goal</li>
+              <li>Primary fitness objective (strength, muscle gain, weight loss, endurance)</li>
+              <li>Experience level</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- WORKOUTS -->
+    <div id="workouts">
+      <div class="section-title">Workouts &amp; Tracking</div>
+      <div class="faq-group">
+        <div class="faq-group-label">Logging Workouts</div>
+
+        <details>
+          <summary>How do I log a workout?</summary>
+          <div class="faq-body">
+            <p>Tap the <strong>+</strong> button on the home screen or navigate to the <strong>Workout</strong> tab and tap <strong>Start Workout</strong>. You can:</p>
+            <ul>
+              <li>Search from 700+ exercises in our library</li>
+              <li>Add sets, reps, and weight for each exercise</li>
+              <li>Start a rest timer between sets</li>
+              <li>Add notes for any exercise</li>
+            </ul>
+            <p>When done, tap <strong>Finish Workout</strong> to save it.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can I create and save custom workout templates?</summary>
+          <div class="faq-body">
+            <p>Yes. After building a workout, tap <strong>Save as Template</strong>. Your templates appear in the <strong>Templates</strong> tab so you can quickly start the same routine again.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I track my personal records (PRs)?</summary>
+          <div class="faq-body">
+            <p>DilFit automatically detects new PRs when you log a set that beats your previous best. You'll see a 🏆 trophy badge on the set. Visit <strong>Profile → Progress</strong> to see all your PRs by exercise.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I edit or delete a past workout?</summary>
+          <div class="faq-body">
+            <p>Go to <strong>History</strong>, find the workout date, and tap on it. Tap the <strong>⋯</strong> menu in the top-right corner to edit or delete the entry.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Why is the rest timer not working?</summary>
+          <div class="faq-body">
+            <p>Ensure Background App Refresh is enabled for DilFit in <strong>iOS Settings → DilFit</strong>. Also check that notifications are allowed, as the timer alert requires notification permissions.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ACCOUNT & BILLING -->
+    <div id="account">
+      <div class="section-title">Account &amp; Billing</div>
+      <div class="faq-group">
+        <div class="faq-group-label">Subscription</div>
+
+        <details>
+          <summary>What's included in DilFit Pro?</summary>
+          <div class="faq-body">
+            <p>DilFit Pro unlocks:</p>
+            <ul>
+              <li>Unlimited AI Coach conversations</li>
+              <li>Advanced progress analytics and body measurements</li>
+              <li>Priority customer support</li>
+              <li>Custom workout plan generation</li>
+            </ul>
+            <p>Free users still get full workout tracking, the social feed, challenges, and up to 3 AI Coach messages per week.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I cancel my subscription?</summary>
+          <div class="faq-body">
+            <p>Subscriptions are managed through the App Store or Google Play — not directly through DilFit.</p>
+            <ul>
+              <li><strong>iOS:</strong> Settings → [Your Name] → Subscriptions → DilFit → Cancel</li>
+              <li><strong>Android:</strong> Google Play → Profile icon → Payments → Subscriptions → DilFit → Cancel</li>
+            </ul>
+            <p>You'll retain Pro access until the end of your current billing period.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>I was charged but my account is still on the free plan.</summary>
+          <div class="faq-body">
+              <p>This is usually a sync delay. Pull down to refresh on the Profile screen. If it still shows free after 5 minutes, tap <strong>Profile → Settings → Restore Purchases</strong>. Still not working? Email us at <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a> with your order confirmation.</p>
+            </div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <div class="faq-group-label">Data &amp; Privacy</div>
+
+        <details>
+          <summary>How do I export my workout data?</summary>
+          <div class="faq-body">
+            <p>Go to <strong>Profile → Settings → Export Data</strong>. You'll receive a CSV file with your full workout history via email within a few minutes.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I delete my account?</summary>
+          <div class="faq-body">
+            <p>You can delete your account at any time:</p>
+            <ul>
+              <li><strong>In-app:</strong> Profile → Settings → Delete Account</li>
+              <li><strong>By email:</strong> Send a deletion request to <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a> from your registered address</li>
+            </ul>
+            <div class="danger-box">
+              <h4>⚠ This action is permanent</h4>
+              <p>Deleting your account permanently removes all your workouts, social posts, challenges, badges, and profile data within 30 days. This cannot be undone. Consider exporting your data first.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- SOCIAL & CHALLENGES -->
+    <div id="social">
+      <div class="section-title">Social &amp; Challenges</div>
+      <div class="faq-group">
+
+        <details>
+          <summary>How do I follow someone on DilFit?</summary>
+          <div class="faq-body">
+            <p>Tap on a user's profile photo or name anywhere in the app to open their profile. Tap the <strong>Follow</strong> button. If their account is private, they'll need to approve your request.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do challenges work?</summary>
+          <div class="faq-body">
+            <p>Challenges are group fitness competitions you can join or create. Navigate to the <strong>Challenges</strong> tab, browse active challenges, and tap <strong>Join</strong>. Progress is tracked automatically from your workout logs. Leaderboards update in real time.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I report inappropriate content?</summary>
+          <div class="faq-body">
+            <p>Long-press any post or comment and tap <strong>Report</strong>. Our moderation team reviews all reports within 24 hours. For urgent safety issues, email <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a>.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I make my profile private?</summary>
+          <div class="faq-body">
+            <p>Go to <strong>Profile → Settings → Privacy → Private Account</strong>. With a private account, only approved followers can see your posts and workout history.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- AI COACH -->
+    <div id="ai-coach">
+      <div class="section-title">AI Coach</div>
+      <div class="faq-group">
+
+        <details>
+          <summary>How does the AI Coach work?</summary>
+          <div class="faq-body">
+            <p>The AI Coach is powered by large language models and has access to your workout history, current fitness goals, and exercise preferences. Ask it anything — program design, exercise technique, nutrition basics, or recovery tips — and it'll give personalised advice based on your data.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Is my workout data sent to the AI?</summary>
+          <div class="faq-body">
+            <p>Only the context needed to answer your question is sent (e.g., recent workouts, goal settings). This data is processed by our AI provider and is not used to train external models. See our <a href="privacy.html">Privacy Policy</a> for full details.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Why did the AI give me advice I disagree with?</summary>
+          <div class="faq-body">
+            <p>The AI Coach provides general fitness guidance and should not replace professional medical or coaching advice. If a recommendation doesn't suit your situation, you can ask follow-up questions or adjust your goals in Settings. Always consult a qualified professional before making significant changes to your training.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-card">
+      <h2>Still need help?</h2>
+      <p>Our support team usually responds within a few hours on weekdays.</p>
+      <div class="contact-options">
+        <a class="btn btn-primary" href="mailto:bek.develop@gmail.com">
+          ✉ Email Support
+        </a>
+        <a class="btn btn-secondary" href="privacy.html">
+          Privacy Policy
+        </a>
+        <a class="btn btn-secondary" href="terms.html">
+          Terms of Service
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>
+      <a href="landing.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a>
+    </p>
+    <p style="margin-top:12px;">© 2026 DilFit. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function filterFAQ(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('details').forEach(el => {
+        const text = el.textContent.toLowerCase();
+        el.style.display = (!q || text.includes(q)) ? '' : 'none';
+        if (!q) el.removeAttribute('open');
+      });
+    }
+  </script>
+</body>
+</html>

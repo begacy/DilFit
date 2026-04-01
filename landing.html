@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DilFit — Train Smarter. Together.</title>
+  <meta name="description" content="DilFit is the smart workout tracker with an AI Coach, social feed, and real-time challenges. Available on iOS and Android.">
+  <meta property="og:title" content="DilFit — Train Smarter. Together.">
+  <meta property="og:description" content="Log workouts, challenge friends, and get AI-powered coaching personalised to your data.">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card2: #263348;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent2: #8b5cf6;
+      --border: rgba(255,255,255,0.07);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(15,23,42,0.75);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+    }
+    .topnav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .brand { font-size: 1.35rem; font-weight: 900; color: var(--text); text-decoration: none; letter-spacing: -0.8px; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
+    .nav-links a {
+      padding: 7px 14px; border-radius: 8px;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 8px 20px !important; border-radius: 10px !important;
+      background: var(--accent) !important; color: #fff !important;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 80px;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% -10%, rgba(99,102,241,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(139,92,246,0.12) 0%, transparent 60%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+      padding: 6px 16px; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600; color: var(--accent-light);
+      margin-bottom: 28px; letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 900; line-height: 1.1;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.2rem; color: var(--muted);
+      max-width: 520px; margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 64px; }
+    .btn-hero {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 32px; border-radius: 14px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+    }
+    .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(99,102,241,0.35); }
+    .btn-hero-primary { background: var(--accent); color: #fff; }
+    .btn-hero-secondary {
+      background: var(--card); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .store-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 24px; border-radius: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--text); text-decoration: none;
+      font-weight: 600; font-size: 0.9rem;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .store-badge:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .store-badge svg { width: 22px; height: 22px; fill: currentColor; }
+
+    /* phone mockup */
+    .hero-phones {
+      position: relative; width: 100%; max-width: 700px; margin: 0 auto;
+      height: 420px; display: flex; align-items: flex-end; justify-content: center;
+      gap: 20px;
+    }
+    .phone {
+      width: 200px; border-radius: 32px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .phone.center { height: 400px; }
+    .phone.side { height: 320px; opacity: 0.7; margin-bottom: 20px; }
+    .phone-header {
+      height: 48px; background: rgba(99,102,241,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .phone-dot { width: 80px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.15); }
+    .phone-screen { padding: 16px; }
+    .phone-row { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 10px; }
+    .phone-row.short { width: 60%; }
+    .phone-row.accent { background: rgba(99,102,241,0.4); }
+    .phone-row.green { background: rgba(34,197,94,0.3); }
+    .phone-card {
+      background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 12px; padding: 12px; margin-bottom: 10px;
+    }
+    .phone-card .phone-row { margin-bottom: 6px; }
+    .phone-stat {
+      display: flex; gap: 8px;
+    }
+    .phone-stat-box {
+      flex: 1; background: rgba(255,255,255,0.05);
+      border-radius: 8px; padding: 8px; text-align: center;
+    }
+    .phone-stat-num { height: 16px; background: rgba(99,102,241,0.5); border-radius: 4px; margin-bottom: 6px; }
+    .phone-stat-label { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    /* ── SOCIAL PROOF ── */
+    .social-proof {
+      background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 28px 24px; text-align: center;
+    }
+    .social-proof p { color: var(--muted); font-size: 0.875rem; margin-bottom: 20px; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 600; }
+    .stats-row { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 900; color: var(--text); letter-spacing: -1px; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 96px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-eyebrow {
+      display: inline-block; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent-light); margin-bottom: 12px;
+    }
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900; letter-spacing: -1px;
+      margin-bottom: 16px; line-height: 1.15;
+    }
+    .section-header p { color: var(--muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto; }
+
+    /* ── FEATURES GRID ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 20px;
+    }
+    .icon-purple { background: rgba(99,102,241,0.15); }
+    .icon-green { background: rgba(34,197,94,0.15); }
+    .icon-orange { background: rgba(249,115,22,0.15); }
+    .icon-blue { background: rgba(59,130,246,0.15); }
+    .icon-pink { background: rgba(236,72,153,0.15); }
+    .icon-yellow { background: rgba(234,179,8,0.15); }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+
+    /* ── BIG FEATURE SPLIT ── */
+    .split-section {
+      padding: 80px 24px;
+      background: linear-gradient(180deg, var(--bg) 0%, rgba(30,41,59,0.4) 50%, var(--bg) 100%);
+    }
+    .split-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .split-inner.reverse { direction: rtl; }
+    .split-inner.reverse > * { direction: ltr; }
+    .split-text .eyebrow {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px;
+    }
+    .split-text h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900;
+      letter-spacing: -1px; line-height: 1.15; margin-bottom: 20px;
+    }
+    .split-text p { color: var(--muted); font-size: 1rem; margin-bottom: 16px; }
+    .check-list { list-style: none; margin: 24px 0 32px; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      color: var(--muted); font-size: 0.92rem; margin-bottom: 10px;
+    }
+    .check-list li::before {
+      content: '✓'; color: #22c55e; font-weight: 800;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .pill-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border-radius: 10px;
+      background: var(--accent); color: #fff;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .pill-link:hover { opacity: 0.85; transform: translateY(-2px); }
+    .split-visual {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      min-height: 380px; padding: 28px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .vis-title { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .vis-bar {
+      height: 10px; border-radius: 5px;
+      background: rgba(255,255,255,0.07);
+      position: relative; overflow: hidden;
+    }
+    .vis-bar-fill {
+      height: 100%; border-radius: 5px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 1s ease;
+    }
+    .vis-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .vis-label { font-size: 0.85rem; color: var(--muted); }
+    .vis-value { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .vis-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+    .vis-stat {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px;
+    }
+    .vis-stat-n { font-size: 1.4rem; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
+    .vis-stat-l { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .vis-chat { display: flex; flex-direction: column; gap: 10px; }
+    .vis-bubble {
+      padding: 12px 16px; border-radius: 14px;
+      font-size: 0.85rem; max-width: 85%;
+    }
+    .vis-bubble.user { background: var(--accent); color: #fff; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
+    .vis-bubble.ai { background: rgba(255,255,255,0.07); color: var(--text); align-self: flex-start; border-radius: 14px 14px 14px 4px; }
+
+    /* ── CHALLENGES SECTION ── */
+    .challenge-cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 16px;
+    }
+    .challenge-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px; overflow: hidden; position: relative;
+    }
+    .challenge-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .challenge-card.c1::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .challenge-card.c2::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .challenge-card.c3::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+    .ch-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .ch-title { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+    .ch-progress-bg { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; margin-bottom: 10px; }
+    .ch-progress-fill { height: 100%; border-radius: 3px; }
+    .c1 .ch-progress-fill { background: var(--accent); width: 68%; }
+    .c2 .ch-progress-fill { background: #22c55e; width: 45%; }
+    .c3 .ch-progress-fill { background: #f97316; width: 82%; }
+    .ch-meta { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: var(--card);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .testimonials-inner {
+      max-width: 1100px; margin: 0 auto; padding: 80px 24px;
+    }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .testi-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+    }
+    .stars { color: #facc15; font-size: 0.9rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-text { color: var(--muted); font-size: 0.92rem; line-height: 1.65; margin-bottom: 20px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; color: #fff;
+    }
+    .av1 { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+    .av2 { background: linear-gradient(135deg, #22c55e, #0d9488); }
+    .av3 { background: linear-gradient(135deg, #f97316, #ef4444); }
+    .testi-name { font-weight: 700; font-size: 0.9rem; }
+    .testi-role { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 20px; max-width: 720px; margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 36px; text-align: center;
+      position: relative; transition: transform 0.2s;
+    }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), var(--card));
+    }
+    .featured-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      padding: 4px 16px; border-radius: 100px; font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+    }
+    .pricing-plan { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+    .pricing-price { font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; }
+    .pricing-price sup { font-size: 1.2rem; letter-spacing: 0; vertical-align: top; margin-top: 14px; display: inline-block; }
+    .pricing-period { font-size: 0.85rem; color: var(--muted); margin-bottom: 28px; }
+    .pricing-features { list-style: none; text-align: left; margin-bottom: 28px; }
+    .pricing-features li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.9rem; color: var(--muted); margin-bottom: 10px;
+    }
+    .pricing-features li::before { content: '✓'; color: #22c55e; font-weight: 800; flex-shrink: 0; }
+    .pricing-features li.dim::before { content: '–'; color: var(--border); }
+    .pricing-features li.dim { color: rgba(148,163,184,0.4); }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      padding: 100px 24px;
+      text-align: center;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(99,102,241,0.18) 0%, transparent 70%);
+    }
+    .cta-banner h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900;
+      letter-spacing: -1.5px; margin-bottom: 16px;
+    }
+    .cta-banner p { color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
+    .store-badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--card); border-top: 1px solid var(--border);
+      padding: 48px 24px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px;
+    }
+    .footer-brand .brand { display: block; margin-bottom: 10px; font-size: 1.4rem; }
+    .footer-brand p { color: var(--muted); font-size: 0.85rem; max-width: 240px; }
+    .footer-cols { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; }
+    .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.88rem; margin-bottom: 10px; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: 1100px; margin: 32px auto 0;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { color: var(--muted); font-size: 0.82rem; }
+
+    @media (max-width: 768px) {
+      .split-inner { grid-template-columns: 1fr; gap: 40px; }
+      .split-inner.reverse { direction: ltr; }
+      .hero-phones { height: 300px; }
+      .phone.side { display: none; }
+      .phone.center { height: 300px; }
+      .footer-inner { flex-direction: column; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <a class="brand" href="landing.html">Fit<span>Book</span></a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#ai-coach">AI Coach</a>
+        <a href="#pricing">Pricing</a>
+        <a href="support.html">Support</a>
+        <a href="#download" class="nav-cta">Download Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-badge">✨ Now with AI-Powered Coaching</div>
+      <h1>Train Smarter.<br><em>Together.</em></h1>
+      <p class="hero-sub">Log workouts, challenge friends, and get AI coaching personalised to your fitness data — all in one app.</p>
+
+      <div class="hero-cta">
+        <a class="btn-hero btn-hero-primary" href="#download">
+          Get DilFit Free →
+        </a>
+        <a class="btn-hero btn-hero-secondary" href="#features">
+          See Features
+        </a>
+      </div>
+
+      <!-- Phones mockup -->
+      <div class="hero-phones">
+        <div class="phone side">
+          <div class="phone-header"><div class="phone-dot"></div></div>
+          <div class="phone-screen">
+            <div class="phone-row short"></div>
+            <div class="phone-row"></div>
+            <div class="phone-row short accent"></div>
+            <div style="height:10px"></div>
+            <div class="phone-card"><div class="phone-row"></div><div class="phone-row short green"></div></div>
+            <div class="phone-card"><div class="phone-row"></div><div class="phone-row short accent"></div></div>
+          </div>
+        </div>
+        <div class="phone center">
+          <div class="phone-header"><div class="phone-dot"></div></div>
+          <div class="phone-screen">
+            <div class="phone-row short" style="background:rgba(99,102,241,0.5)"></div>
+            <div style="height:6px"></div>
+            <div class="phone-stat">
+              <div class="phone-stat-box"><div class="phone-stat-num"></div><div class="phone-stat-label"></div></div>
+              <div class="phone-stat-box"><div class="phone-stat-num" style="background:rgba(34,197,94,0.5)"></div><div class="phone-stat-label"></div></div>
+              <div class="phone-stat-box"><div class="phone-stat-num" style="background:rgba(249,115,22,0.4)"></div><div class="phone-stat-label"></div></div>
+            </div>
+            <div style="height:10px"></div>
+            <div class="phone-card">
+              <div class="phone-row"></div>
+              <div class="phone-row short accent"></div>
+              <div style="height:8px"></div>
+              <div class="phone-row" style="width:100%;background:rgba(34,197,94,0.3);height:8px"></div>
+            </div>
+            <div class="phone-card">
+              <div class="phone-row short"></div>
+              <div class="phone-row"></div>
+            </div>
+            <div class="phone-card">
+              <div class="phone-row short" style="background:rgba(249,115,22,0.4)"></div>
+              <div class="phone-row"></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone side">
+          <div class="phone-header"><div class="phone-dot"></div></div>
+          <div class="phone-screen">
+            <div class="phone-row"></div>
+            <div class="phone-row short green"></div>
+            <div style="height:10px"></div>
+            <div class="phone-card"><div class="phone-row short accent"></div><div class="phone-row"></div></div>
+            <div class="phone-card"><div class="phone-row"></div><div class="phone-row short green"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <div class="social-proof">
+    <p>Trusted by athletes worldwide</p>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">10K+</div>
+        <div class="stat-label">Active Athletes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">700+</div>
+        <div class="stat-label">Exercises</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4.8★</div>
+        <div class="stat-label">App Store Rating</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1M+</div>
+        <div class="stat-label">Workouts Logged</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-eyebrow">Everything you need</span>
+        <h2>The smartest workout app<br>you'll ever use</h2>
+        <p>From beginner to elite, DilFit adapts to your journey with powerful tools that stay out of your way.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon icon-purple">💪</div>
+          <h3>Smart Workout Tracking</h3>
+          <p>Log every set, rep, and weight in seconds. Auto-detects new personal records and tracks your progress over time with beautiful charts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-yellow">🤖</div>
+          <h3>AI Coach</h3>
+          <p>Your personal trainer powered by AI. Gets smarter the more you train — giving advice grounded in your actual workout history and goals.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-green">🏆</div>
+          <h3>Live Challenges</h3>
+          <p>Join weekly community challenges or create your own. Real-time leaderboards keep the competition fierce and the motivation high.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-blue">📱</div>
+          <h3>Social Feed</h3>
+          <p>Share milestones, post your workouts, and celebrate PRs with your fitness circle. A community that trains together stays motivated.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-orange">📊</div>
+          <h3>Progress Analytics</h3>
+          <p>Volume trends, body measurements, streaks, and muscle-group heat maps. See exactly where you're growing (and where to push harder).</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-pink">⚡</div>
+          <h3>Offline-First</h3>
+          <p>No Wi-Fi? No problem. Every workout, exercise, and template is cached locally and syncs seamlessly when you reconnect.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI COACH SPLIT -->
+  <section class="split-section" id="ai-coach">
+    <div class="split-inner">
+      <div class="split-text">
+        <div class="eyebrow">AI Coach</div>
+        <h2>A coach that actually knows your training</h2>
+        <p>Ask anything — program design, exercise swaps, plateau-busting tactics, or recovery advice. The AI Coach reads your real workout history, not generic templates.</p>
+        <ul class="check-list">
+          <li>Personalised responses based on your actual workout data</li>
+          <li>Understands progressive overload and your current volume</li>
+          <li>Suggests exercise alternatives for your equipment</li>
+          <li>Available 24/7 — no scheduling, no waiting</li>
+        </ul>
+        <a class="pill-link" href="#download">Try it free →</a>
+      </div>
+      <div class="split-visual">
+        <div class="vis-title">AI Coach</div>
+        <div class="vis-chat">
+          <div class="vis-bubble user">How should I fix my bench press plateau? I've been stuck at 100 kg for 3 weeks.</div>
+          <div class="vis-bubble ai">Looking at your last 3 weeks: volume is consistent but you've only attempted 100 kg on Mondays after a heavy shoulder day. Try shifting bench to Wednesday when your chest is fresher, and add a back-off set at 90 kg × 5. You also haven't done any close-grip work this month — adding it would build tricep lockout strength which is likely your weak point at this weight.</div>
+          <div class="vis-bubble user">Makes sense! Can you build me a 4-week plan?</div>
+          <div class="vis-bubble ai">Sure — based on your 4 sessions/week schedule and current PRs, here's a plan...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGES SPLIT -->
+  <section class="split-section">
+    <div class="split-inner reverse">
+      <div class="split-text">
+        <div class="eyebrow">Challenges</div>
+        <h2>Compete. Win. Repeat.</h2>
+        <p>Weekly and monthly challenges keep you accountable and add a competitive edge to every training session. Create your own or join thousands of others.</p>
+        <ul class="check-list">
+          <li>Real-time leaderboards updated after each workout</li>
+          <li>Custom challenges for your team or gym</li>
+          <li>Earn badges and XP for every milestone</li>
+          <li>Challenge types: volume, consistency, PRs, and more</li>
+        </ul>
+        <a class="pill-link" href="#download">Join a challenge →</a>
+      </div>
+      <div class="split-visual">
+        <div class="vis-title">Active Challenges</div>
+        <div class="challenge-cards" style="grid-template-columns:1fr;">
+          <div class="challenge-card c1">
+            <div class="ch-label">Weekly · 342 participants</div>
+            <div class="ch-title">💪 April Strength Week</div>
+            <div class="ch-progress-bg"><div class="ch-progress-fill"></div></div>
+            <div class="ch-meta"><span>Your rank: #12</span><span>3 days left</span></div>
+          </div>
+          <div class="challenge-card c2">
+            <div class="ch-label">Monthly · 1,204 participants</div>
+            <div class="ch-title">🏃 10K Reps Challenge</div>
+            <div class="ch-progress-bg"><div class="ch-progress-fill"></div></div>
+            <div class="ch-meta"><span>4,500 / 10,000 reps</span><span>22 days left</span></div>
+          </div>
+          <div class="challenge-card c3">
+            <div class="ch-label">Community · 89 participants</div>
+            <div class="ch-title">🔥 30-Day Consistency</div>
+            <div class="ch-progress-bg"><div class="ch-progress-fill"></div></div>
+            <div class="ch-meta"><span>25 / 30 sessions</span><span>5 days left</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESS SPLIT -->
+  <section class="split-section">
+    <div class="split-inner">
+      <div class="split-text">
+        <div class="eyebrow">Analytics</div>
+        <h2>See your progress. Actually.</h2>
+        <p>Rich charts, muscle-group breakdowns, and streak tracking turn your raw workout logs into a clear picture of how you're improving.</p>
+        <ul class="check-list">
+          <li>Weekly and monthly volume charts per muscle group</li>
+          <li>Body measurement tracking with trend lines</li>
+          <li>Workout streak calendar and consistency score</li>
+          <li>Personal record history for every exercise</li>
+        </ul>
+        <a class="pill-link" href="#download">Track your gains →</a>
+      </div>
+      <div class="split-visual">
+        <div class="vis-title">This Month's Progress</div>
+        <div class="vis-stat-grid">
+          <div class="vis-stat"><div class="vis-stat-n">18</div><div class="vis-stat-l">Workouts</div></div>
+          <div class="vis-stat"><div class="vis-stat-n">7</div><div class="vis-stat-l">New PRs</div></div>
+          <div class="vis-stat"><div class="vis-stat-n">42.6t</div><div class="vis-stat-l">Total Volume</div></div>
+          <div class="vis-stat"><div class="vis-stat-n">🔥18</div><div class="vis-stat-l">Day Streak</div></div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="vis-title">Volume by Muscle Group</div>
+        <div>
+          <div class="vis-row"><span class="vis-label">Chest</span><span class="vis-value">12,400 kg</span></div>
+          <div class="vis-bar"><div class="vis-bar-fill" style="width:85%"></div></div>
+          <div class="vis-row"><span class="vis-label">Back</span><span class="vis-value">14,200 kg</span></div>
+          <div class="vis-bar"><div class="vis-bar-fill" style="width:100%"></div></div>
+          <div class="vis-row"><span class="vis-label">Legs</span><span class="vis-value">19,800 kg</span></div>
+          <div class="vis-bar"><div class="vis-bar-fill" style="width:100%;background:linear-gradient(90deg,#22c55e,#0d9488)"></div></div>
+          <div class="vis-row"><span class="vis-label">Shoulders</span><span class="vis-value">6,100 kg</span></div>
+          <div class="vis-bar"><div class="vis-bar-fill" style="width:43%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials-inner">
+      <div class="section-header">
+        <span class="section-eyebrow">Reviews</span>
+        <h2>Athletes love DilFit</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"The AI Coach is genuinely impressive. I asked about my deadlift stall and it pulled up my actual last 6 sessions and diagnosed exactly what was wrong. No other app does this."</p>
+          <div class="testi-author">
+            <div class="testi-avatar av1">MR</div>
+            <div><div class="testi-name">Marcus R.</div><div class="testi-role">Powerlifter · 3 years on DilFit</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"I've tried every workout app and this is the first one my whole gym group uses together. The challenges make training so much more fun. We have a 30-day streak going."</p>
+          <div class="testi-author">
+            <div class="testi-avatar av2">SL</div>
+            <div><div class="testi-name">Sofia L.</div><div class="testi-role">Fitness Coach · CrossFit</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"Clean UI, offline mode actually works, and the progress charts are exactly what I needed. Switched from a spreadsheet and haven't looked back."</p>
+          <div class="testi-author">
+            <div class="testi-avatar av3">JK</div>
+            <div><div class="testi-name">Jake K.</div><div class="testi-role">Marathon runner & gym regular</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-eyebrow">Pricing</span>
+        <h2>Start free. Upgrade when ready.</h2>
+        <p>Full workout tracking, social features, and challenges are free forever. Upgrade for AI Coach and advanced analytics.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-plan">Free</div>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-period">forever</div>
+          <ul class="pricing-features">
+            <li>Unlimited workout logging</li>
+            <li>700+ exercise library</li>
+            <li>Workout templates</li>
+            <li>Social feed & followers</li>
+            <li>Join challenges</li>
+            <li>Basic progress charts</li>
+            <li class="dim">Unlimited AI Coach</li>
+            <li class="dim">Advanced analytics</li>
+            <li class="dim">Custom workout plans</li>
+          </ul>
+          <a class="pill-link" href="#download" style="justify-content:center;width:100%;display:flex;">Download Free</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <div class="pricing-plan">Pro</div>
+          <div class="pricing-price"><sup>$</sup>9<span style="font-size:1.4rem;letter-spacing:-0.5px">.99</span></div>
+          <div class="pricing-period">per month · cancel anytime</div>
+          <ul class="pricing-features">
+            <li>Everything in Free</li>
+            <li>Unlimited AI Coach</li>
+            <li>Advanced analytics & charts</li>
+            <li>Body measurement tracking</li>
+            <li>Custom workout plan generation</li>
+            <li>Create challenges</li>
+            <li>Priority support</li>
+            <li>Early access to new features</li>
+          </ul>
+          <a class="pill-link" href="#download" style="justify-content:center;width:100%;display:flex;">Start Free Trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner" id="download">
+    <h2>Start your fitness journey today.</h2>
+    <p>Free to download. No credit card required.</p>
+    <div class="store-badges">
+      <a class="store-badge" href="#" aria-label="Download on the App Store">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div>
+          <div style="font-size:0.7rem;color:var(--muted)">Download on the</div>
+          <div style="font-size:0.95rem;font-weight:700">App Store</div>
+        </div>
+      </a>
+      <a class="store-badge" href="#" aria-label="Get it on Google Play">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.3.17.64.24.99.2l.14-.05L14.93 12 11 8.07l-7.82 14.5c-.04.38.06.77.3 1.07.2.13.44.2.7.12zM20.43 10.6l-2.75-1.57-3.13 3.13 3.13 3.13 2.75-1.57c.79-.45.79-1.67 0-2.12zM2.57 1.31C2.28 1.58 2.12 1.98 2.12 2.4v19.2c0 .42.16.82.45 1.09L3.18 23l10.68-10.68V12L3.18 1.31 2.57 1.31zM11.81 15.06L3.32 23.55l.12-.15 8.37-8.34z"/></svg>
+        <div>
+          <div style="font-size:0.7rem;color:var(--muted)">Get it on</div>
+          <div style="font-size:0.95rem;font-weight:700">Google Play</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="landing.html">Fit<span>Book</span></a>
+        <p>The smart workout tracker with AI coaching, challenges, and social features.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#ai-coach">AI Coach</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#download">Download</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="support.html">Support</a>
+          <a href="mailto:bek.develop@gmail.com">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DilFit. All rights reserved.</p>
+      <p>
+        <a href="privacy.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy</a>
+        <a href="terms.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">Terms</a>
+        <a href="support.html" style="color:var(--muted);text-decoration:none;">Support</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
