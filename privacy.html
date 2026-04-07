@@ -42,7 +42,9 @@
       <li><strong>Workout data</strong> — exercises, sets, reps, weights, duration, and notes you log while using the app.</li>
       <li><strong>Social data</strong> — posts, comments, likes, and follower/following relationships you create.</li>
       <li><strong>Device &amp; usage data</strong> — device model, OS version, crash logs (via Sentry), and anonymous analytics to improve app performance.</li>
+      <!-- TODO(healthkit): re-enable when HealthKit integration is implemented
       <li><strong>Health &amp; wearable data</strong> — if you connect Apple Health (HealthKit) or Google Fit, we may read steps, calories burned, active minutes, heart rate, sleep duration, and body weight data that you explicitly grant access to.</li>
+      -->
     </ul>
 
     <h2>2. How We Use Your Information</h2>
@@ -54,6 +56,7 @@
       <li>Monitor and prevent fraud, abuse, and security incidents.</li>
     </ul>
 
+    <!-- TODO(healthkit): re-enable when HealthKit integration is implemented
     <h2>3. Apple HealthKit Data</h2>
     <p>If you choose to connect Apple Health, DilFit accesses HealthKit data solely to enhance your workout tracking experience. The following policies apply specifically to data obtained through HealthKit:</p>
     <ul>
@@ -62,11 +65,12 @@
       <li>HealthKit data is <strong>not</strong> stored on external servers beyond what is necessary to provide the core functionality of the app (syncing your metrics to your DilFit account).</li>
       <li>You may disconnect Apple Health at any time from the Wearable screen in DilFit. Upon disconnection, synced health data is removed from your account.</li>
     </ul>
+    -->
 
-    <h2>4. Data Storage &amp; Security</h2>
+    <h2>3. Data Storage &amp; Security</h2>
     <p>Your data is stored in Supabase-managed PostgreSQL databases with row-level security (RLS) enforced. All traffic is encrypted in transit via TLS. Profile photos and media are stored in Supabase Storage with access-controlled buckets.</p>
 
-    <h2>5. Third-Party Services</h2>
+    <h2>4. Third-Party Services</h2>
     <p>We use the following third-party services that may process your data in accordance with their own privacy policies:</p>
     <ul>
       <li><strong>Supabase</strong> — authentication, database, and file storage.</li>
@@ -77,10 +81,10 @@
       <li><strong>Google Sign-In / Apple Sign-In</strong> — OAuth authentication.</li>
     </ul>
 
-    <h2>6. Data Retention</h2>
+    <h2>5. Data Retention</h2>
     <p>We retain your personal data for as long as your account is active. If you delete your account, we permanently erase all associated data within 30 days, including workouts, social posts, challenge participation, badges, and profile information.</p>
 
-    <h2>7. Your Rights</h2>
+    <h2>6. Your Rights</h2>
     <p>Depending on your jurisdiction, you may have the right to:</p>
     <ul>
       <li>Access and receive a copy of the personal data we hold about you.</li>
@@ -91,13 +95,13 @@
     </ul>
     <p>To exercise any of these rights, email us at <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a>.</p>
 
-    <h2>8. Children's Privacy</h2>
+    <h2>7. Children's Privacy</h2>
     <p>DilFit is not intended for users under 16 years of age. We do not knowingly collect data from children. If you believe a child has provided us with personal data, please contact us so we can delete it.</p>
 
-    <h2>9. Changes to This Policy</h2>
+    <h2>8. Changes to This Policy</h2>
     <p>We may update this privacy policy from time to time. We will notify you of material changes by posting the new policy in the app and updating the "Effective date" above.</p>
 
-    <h2>10. Contact Us</h2>
+    <h2>9. Contact Us</h2>
     <p>If you have questions about this privacy policy, contact us at <a href="mailto:bek.develop@gmail.com">bek.develop@gmail.com</a>.</p>
   </div>
 </body>
